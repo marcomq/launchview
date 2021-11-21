@@ -4,6 +4,9 @@
 	let currentItem = ""
 	let items = []
 	let mainInput
+	let runCmd = () => {
+		backend.execShellCmd(currentItem, 0)
+	}
 	let addItem = () => {
 		items.push({id: Math.max(0, ...items.map(t => t.id)) + 1, text: currentItem, completed: false})
 		items = items
@@ -39,6 +42,9 @@
 		mainInput.focus()
 	}
 	$: backend.waitInit().then(() => {getAll()})
+	backend.map("feedback", (value) => {
+		alert(value)
+	})
 </script>
 <main>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-success ">
@@ -57,6 +63,7 @@
 						</div>
 					</div>
 				</form>
+				<button class="btn btn-outline-success"  on:click={runCmd}>Run</button>
 				{#if items.length > 0}
 				<ul id="sortable" class="list-unstyled">
 				{#each items as item}
